@@ -14,3 +14,10 @@ pip install -r requirements.txt
 python run.py
 ```
 
+To use the UI to ask questions, run:
+
+```bash
+streamlit run app.py
+```
+
+You can also run the notebook version: [./demo_notebook](./demo_notebook.ipynb)

@@ -3,3 +3,4 @@ openai==0.27.7
 python-dotenv==1.0.0
 chardet==5.1.0
 sentence_transformers
+streamlit

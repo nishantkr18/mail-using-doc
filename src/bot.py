@@ -8,7 +8,6 @@ from langchain import PromptTemplate
 from langchain.chains import RetrievalQA
 from langchain.callbacks import get_openai_callback
 from openai.error import AuthenticationError
-from langchain.vectorstores import Chroma
 
 
 class Bot:
