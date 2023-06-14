@@ -8,19 +8,21 @@ from langchain import PromptTemplate
 from langchain.chains import RetrievalQA
 from langchain.callbacks import get_openai_callback
 from openai.error import AuthenticationError
+from langchain.vectorstores import Chroma
+
 
 class Bot:
     """
     The bot class.
     """
-    def __init__(self, vectorstore):
+
+    def __init__(self):
         self.llm = OpenAI(temperature=0, max_tokens=200, verbose=True)
         self.chain = None
-        self._feed_data(vectorstore)
 
-    def _feed_data(self, vectorstore):
+    def ask(self, vectorstore, question):
         """
-        Creating a RetrievalQA chain with the vectorstore.
+        Asking the bot a question.
         """
 
         # Using the LLMChain to make your own prompt.
@@ -37,14 +39,13 @@ class Bot:
         Question:
         {question}"""), input_variables=['context', 'question'])
 
+        most_relevant_source = vectorstore.similarity_search(question, k=1)[
+            0].metadata['source']
+
         self.chain = RetrievalQA.from_chain_type(
-            llm=self.llm, chain_type='stuff', retriever=vectorstore.as_retriever(),
+            llm=self.llm, chain_type='stuff', retriever=vectorstore.as_retriever(search_kwargs={"k": 4, "filter": {'source': most_relevant_source}}),
             chain_type_kwargs={"verbose": True, "prompt": prompt})
 
-    def ask(self, question):
-        """
-        Asking the bot a question.
-        """
         with get_openai_callback() as callback:
             try:
                 response = self.chain.run(question)

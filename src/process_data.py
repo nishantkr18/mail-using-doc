@@ -9,6 +9,9 @@ from langchain.text_splitter import CharacterTextSplitter
 from langchain.embeddings import HuggingFaceEmbeddings
 from langchain.vectorstores import Chroma
 from langchain.docstore.document import Document
+from chromadb.config import Settings
+import chromadb
+
 
 def process_data(docs: List[Document]):
     """
@@ -31,7 +34,18 @@ def process_data(docs: List[Document]):
     embedding = HuggingFaceEmbeddings()
 
     print('Creating vectorstore...')
-    vectorstore = Chroma.from_documents(source_chunks, embedding, persist_directory='./.vectorstore')
-    vectorstore.persist()
+
+    client = chromadb.Client(Settings(
+        chroma_db_impl="duckdb+parquet",
+        persist_directory="./.vectorstore"
+    ))
+    client.persist()
+
+    # Cleaning up the client
+    client.reset()
+
+    vectorstore = Chroma(client=client)
+    vectorstore = Chroma.from_documents(
+        documents=source_chunks, embedding=embedding, client=client)
 
     return vectorstore

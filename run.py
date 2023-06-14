@@ -19,14 +19,14 @@ if __name__ == '__main__':
 
     vectorstore = process_data(docs)
 
-    bot = Bot(vectorstore = vectorstore)
-    
+    bot = Bot()
+
     while True:
         question = input("Enter the question. To exit, type 'exit':")
         if question == 'exit':
             break
 
-        response = bot.ask(question)
+        response = bot.ask(vectorstore=vectorstore, question=question)
         print(response)
 
     del vectorstore
