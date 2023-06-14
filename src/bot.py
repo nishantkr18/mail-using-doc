@@ -14,7 +14,7 @@ class Bot:
     The bot class.
     """
     def __init__(self, vectorstore):
-        self.llm = OpenAI(temperature=0, max_tokens=100, verbose=True)
+        self.llm = OpenAI(temperature=0, max_tokens=200, verbose=True)
         self.chain = None
         self._feed_data(vectorstore)
 
@@ -26,7 +26,8 @@ class Bot:
         # Using the LLMChain to make your own prompt.
         prompt = PromptTemplate(template=textwrap.dedent("""
         Provided is the name of a user, followed by a question.
-        Your task is to write a short mail, answering the question based on the information provided in the context.
+        Write a short, crisp mail, answering the question based on the information provided in the context.
+        Make sure to exclude any information that is not relevant to the question.
         Do not hallucinate. If you cant find the answer in the context, mention that you dont know.
         #####
 
