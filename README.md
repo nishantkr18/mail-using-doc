@@ -1,3 +1,9 @@
+# Description:
+
+A python script that can:
+1. Read multiple txt files you provide
+2. Answer your question (in the form of a mail) by selecting the most relevant txt file
+
 # Instructions to run:
 
 Create a folder names "docs". Upload your txt files there.
